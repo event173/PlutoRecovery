@@ -3,11 +3,18 @@ function TemporaryFiles {
     $confirmation = Read-Host "Möchten Sie wirklich alle temporären Dateien löschen? (J) (N)"
     if ($confirmation -eq 'J' -or $confirmation -eq 'j') {
         Write-Host "Temporäre Dateien werden gereinigt..."
-        $terminateEdge = Get-Process -Name "msedgewebview2"
-        if ($terminateEdge) {
-            $terminateEdge | Stop-Process -Force
-            Write-Host
+
+        # List of tasks to terminate
+        $tasksToTerminate = @("msedgewebview2", "AnotherTask", "YetAnotherTask")
+
+        foreach ($task in $tasksToTerminate) {
+            $terminateTask = Get-Process -Name $task -ErrorAction SilentlyContinue
+            if ($terminateTask) {
+                $terminateTask | Stop-Process -Force
+                Write-Host "Task $task has been terminated successfully."
+            }
         }
+
         try {
             Get-ChildItem "C:\Windows\Temp" -Recurse | Remove-Item -Force -Recurse
             Get-ChildItem "C:\Users\*\AppData\Local\Temp" -Recurse | Remove-Item -Force -Recurse
@@ -19,6 +26,7 @@ function TemporaryFiles {
         Write-Host "Löschen der temporären Dateien abgebrochen."
     }
 }
+
 
 function Wiederherstellungspunkt {
     # Definiert den Namen des Wiederherstellungspunktes
