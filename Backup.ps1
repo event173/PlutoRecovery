@@ -5,7 +5,7 @@ function TemporaryFiles {
         Write-Host "Temporäre Dateien werden gereinigt..."
 
         # List of tasks to terminate
-        $tasksToTerminate = @("msedgewebview2", "AnotherTask", "YetAnotherTask")
+        $tasksToTerminate = @("msedgewebview2", "Creative Cloud", "msedge", "CoreSync", "OfficeClickToRun", "steam", "steamwebhelper", "steamservice", "Discord", "Spotify")
 
         foreach ($task in $tasksToTerminate) {
             $terminateTask = Get-Process -Name $task -ErrorAction SilentlyContinue
