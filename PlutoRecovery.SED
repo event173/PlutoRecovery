@@ -4,7 +4,7 @@ SEDVersion=3
 [Options]
 PackagePurpose=InstallApp
 ShowInstallProgramWindow=0
-HideExtractAnimation=0
+HideExtractAnimation=1
 UseLongFileName=1
 InsideCompressed=0
 CAB_FixedSize=0
@@ -24,14 +24,14 @@ SourceFiles=SourceFiles
 InstallPrompt=
 DisplayLicense=
 FinishMessage=
-TargetName=C:\Users\nickw\OneDrive\Personal\BBS1\Abschlussprojekt\Powershell-Tools\Script.EXE
-FriendlyName=Test
-AppLaunched=powershell.exe -ExecutionPolicy Bypass -File Backup.ps1
+TargetName=C:\Users\nickw\GitHub\Powershell-Tools\PlutoRecovery.EXE
+FriendlyName=PlutoRecovery
+AppLaunched=powershell.exe -ExecutionPolicy Bypass -File PlutoRecovery.ps1
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 UserQuietInstCmd=
-FILE0="Backup.ps1"
+FILE0="PlutoRecovery.ps1"
 [SourceFiles]
-SourceFiles0=C:\Users\nickw\OneDrive\Personal\BBS1\Abschlussprojekt\Powershell-Tools\
+SourceFiles0=C:\Users\nickw\GitHub\Powershell-Tools\
 [SourceFiles0]
 %FILE0%=
