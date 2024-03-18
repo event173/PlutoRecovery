@@ -47,6 +47,7 @@ function DiskHealth{
     Get-PhysicalDisk | Select-Object FriendlyName, Size, MediaType, OperationalStatus, HealthStatus | Out-Host
 
     $physicalDisks = Get-PhysicalDisk
+    chkdsk /f /r
 
 foreach ($disk in $physicalDisks) {
     Write-Host "Laufwerk: $($disk.FriendlyName), Größe: $($disk.Size), Medientyp: $($disk.MediaType), Betriebsstatus: $($disk.OperationalStatus), Gesundheitsstatus: $($disk.HealthStatus)"
@@ -57,6 +58,7 @@ foreach ($disk in $physicalDisks) {
     foreach ($partition in $partitions) {
         Write-Host "`tPartition: $($partition.PartitionNumber), Größe: $($partition.Size), Typ: $($partition.Type)"
     }
+
 }
 }
 function SystemInfo {
@@ -122,7 +124,7 @@ if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
         "C:\Users\$askedUser\Downloads",
         "C:\Users\$askedUser\Videos"
     )
-    Write-Host "Es wurde OneDrive ausgewählt" -ForegroundColor Green
+    Write-Host "Es wurde OneDrive ausgewählt" -ForegroundColor Yellow
 }
 else {
     $sourceFolders = @(
@@ -132,7 +134,7 @@ else {
         "C:\Users\$askedUser\Downloads",
         "C:\Users\$askedUser\Videos"
     )
-    Write-Host "Es wurde kein OneDrive ausgewählt" -ForegroundColor Green
+    Write-Host "Es wurde kein OneDrive ausgewählt" -ForegroundColor Yellow
 }
 
 
@@ -162,7 +164,6 @@ else {
 }
 
 
-
 Write-Host "Vorgang Abgeschlossen!"
 }
 
@@ -171,6 +172,20 @@ function ClearScreen {
     Clear-Host
 }
 
+function systemIntegrity {
+    Write-Host "Integrität der Systemdateien wird überprüft..."
+    sfc /scannow
+}
+
+function DISMCheck {
+    # Überprüfen Sie die Gesundheit des Systemabbilds
+    $checkHealthResult = & DISM /Online /Cleanup-Image /CheckHealth
+    DISM /Online /Cleanup-Image /ScanHealth
+    # Wenn der CheckHealth-Befehl eine Beschädigung gefunden hat, führen Sie den RestoreHealth-Befehl aus
+    if ($checkHealthResult -like '*Die Komponentenspeicher ist reparierbar*') {
+        & DISM /Online /Cleanup-Image /RestoreHealth
+    }
+}
 do {
     Write-Host "`n------------------------"
     Write-Host "`nMenü:" -ForegroundColor Black -BackgroundColor Blue
@@ -180,6 +195,8 @@ do {
     Write-Host "4. Temporäre Dateien reinigen"
     Write-Host "5. Netzwerkverbindung prüfen"
     Write-Host "6. Wiederherstellungspunkt erstellen"
+    Write-Host "7. Integrität der Systemdateien überprüfen"
+    Write-Host "8. Systemabbild überprüfen und reparieren"
     Write-Host "`nC. Terminal leeren"
     Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte wählen Sie eine Option"
@@ -198,10 +215,16 @@ do {
             TemporaryFiles
         }
         '5' {
-            NetworkConnection
+            Netzwerkverbindung
         }
         '6' {
             Wiederherstellungspunkt
+        }
+        '7' {
+            SystemIntegrity
+        }
+        '8' {
+            DISMCHeck
         }
         'c' {
             ClearScreen
