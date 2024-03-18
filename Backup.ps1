@@ -1,4 +1,5 @@
-Write-Host "Ein Skript"
+
+#Script itself
 function TemporaryFiles {
     $confirmation = Read-Host "Möchten Sie wirklich alle temporären Dateien löschen? (J) (N)"
     if ($confirmation -eq 'J' -or $confirmation -eq 'j') {
