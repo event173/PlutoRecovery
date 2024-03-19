@@ -135,6 +135,10 @@ if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
         $sourcePath +"\Videos"
     )
     Write-Host "Es wurde OneDrive ausgewaehlt" -ForegroundColor Yellow
+    Write-Host "Folgende Ordner werden gesichert:"
+    foreach ($folder in $sourceFolders) {
+        Write-Host $folder
+    }
 }
 else {
     $sourceFolders = @(
@@ -145,6 +149,7 @@ else {
         $sourcePath +"\Videos"
     )
     Write-Host "Es wurde kein OneDrive ausgewaehlt" -ForegroundColor Yellow
+    Write-Host "Folgende Ordner werden gesichert:"
     foreach ($folder in $sourceFolders) {
         Write-Host $folder
     }
@@ -178,6 +183,41 @@ else {
 
 
 Write-Host "Vorgang Abgeschlossen!"
+Write-Host "
+    
+
+                                                      
+                                                      
+                                                      
+                                                      
+             00000000000000000000000000000000         
+           00000000000000000000000000000000000        
+         00000000                    000000000        
+        000000000  0000              000000000        
+        000000000  0000              000000000        
+        000000000  0000              000000000        
+        000000000  0000              000000000        
+        000000000  0000              000000000        
+        000000000                    000000000        
+        00000000000000000000000000000000000000        
+        00000000000000000000000000000000000000        
+        0000000000000000      0000000000000000        
+        00000000000000          00000000000000        
+        0000000000000    0000    0000000000000        
+        00000000000000   0000   00000000000000        
+        00000000000000          00000000000000        
+        00000000000000000    00000000000000000        
+        00000000000000000000000000000000000000        
+        00000000000000000000000000000000000000        
+        00000000000000000000000000000000000000        
+         000000000000000000000000000000000000         
+                                                      
+                                                      
+                                                      
+                                                      
+
+
+"
 playSound
 }
 
