@@ -1,9 +1,9 @@
 
 #Script itself
 function TemporaryFiles {
-    $confirmation = Read-Host "M?chten Sie wirklich alle tempor?ren Dateien l?schen? (J) (N)"
+    $confirmation = Read-Host "Moechten Sie wirklich alle temporaeren Dateien loeschen? (J) (N)"
     if ($confirmation -eq 'J' -or $confirmation -eq 'j') {
-        Write-Host "Tempor?re Dateien werden gereinigt..."
+        Write-Host "Temporaere Dateien werden gereinigt..."
 
         # List of tasks to terminate
         $tasksToTerminate = @("msedgewebview2", "Creative Cloud", "msedge", "CoreSync", "OfficeClickToRun", "steam", "steamwebhelper", "steamservice", "Discord", "Spotify")
@@ -21,10 +21,10 @@ function TemporaryFiles {
             Get-ChildItem "C:\Users\*\AppData\Local\Temp" -Recurse | Remove-Item -Force -Recurse
             Write-Host "Tempor?re Dateien erfolgreich gel?scht."
         } catch {
-            Write-Host "Es gab ein Problem beim L?schen einiger Dateien."
+            Write-Host "Es gab ein Problem beim Loeschen einiger Dateien."
         }
     } else {
-        Write-Host "L?schen der tempor?ren Dateien abgebrochen."
+        Write-Host "Loeschen der temporaeren Dateien abgebrochen."
     }
 }
 
@@ -43,14 +43,14 @@ try {
 }
 
 function DiskHealth{
-    Write-Host "Festplattengesundheit wird ?berpr?ft..."
+    Write-Host "Festplattengesundheit wird ueberprueft..."
     Get-PhysicalDisk | Select-Object FriendlyName, Size, MediaType, OperationalStatus, HealthStatus | Out-Host
 
     $physicalDisks = Get-PhysicalDisk
     chkdsk /f /r
 
 foreach ($disk in $physicalDisks) {
-    Write-Host "Laufwerk: $($disk.FriendlyName), Gr??e: $($disk.Size), Medientyp: $($disk.MediaType), Betriebsstatus: $($disk.OperationalStatus), Gesundheitsstatus: $($disk.HealthStatus)"
+    Write-Host "Laufwerk: $($disk.FriendlyName), Size: $($disk.Size), Medientyp: $($disk.MediaType), Betriebsstatus: $($disk.OperationalStatus), Gesundheitsstatus: $($disk.HealthStatus)"
     
     # Abrufen der Partitionen f?r das aktuelle Laufwerk
     $partitions = Get-Partition | Where-Object { $_.DiskNumber -eq $disk.DeviceID }
@@ -103,7 +103,7 @@ function SystemInfo {
     }
 }
 function DataTransfer {
-Write-Host "Daten?bertragungsskript wird gestartet..."
+Write-Host "Datenuebertragungsskript wird gestartet..."
 Write-Host "Dieses Skript sichert die wichtigsten Daten eines Users"
 Get-ChildItem -Path "C:\Users" | Out-Host
 Write-Host "Welcher User soll gesichert werden?"
@@ -124,7 +124,7 @@ if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
         "C:\Users\$askedUser\Downloads",
         "C:\Users\$askedUser\Videos"
     )
-    Write-Host "Es wurde OneDrive ausgew?hlt" -ForegroundColor Yellow
+    Write-Host "Es wurde OneDrive ausgewaehlt" -ForegroundColor Yellow
 }
 else {
     $sourceFolders = @(
@@ -134,7 +134,7 @@ else {
         "C:\Users\$askedUser\Downloads",
         "C:\Users\$askedUser\Videos"
     )
-    Write-Host "Es wurde kein OneDrive ausgew?hlt" -ForegroundColor Yellow
+    Write-Host "Es wurde kein OneDrive ausgewaehlt" -ForegroundColor Yellow
     playSound
 }
 
@@ -152,7 +152,7 @@ Get-ChildItem -Path $destinationPath | Out-Host
 $destinationUser = Read-Host
 $destinationPath = $askedVolume + ":\Users\" + $destinationUser
 
-Write-Host "Soll von" $sourcePath "auf" $destinationPath "?bertragen werden? (J/N)"
+Write-Host "Soll von" $sourcePath "auf" $destinationPath "Uebertragen werden? (J/N)"
 $answer = Read-Host
 
 if ($answer -eq "J" -or $answer -eq "j") {
@@ -198,7 +198,7 @@ function playSound {
     [Console]::Beep(880, 500)
 }
 function systemIntegrity {
-    Write-Host "Integrit?t der Systemdateien wird ?berpr?ft..."
+    Write-Host "Integritaet der Systemdateien wird ueberprueft..."
     sfc /scannow
     playSound
 }
@@ -228,17 +228,17 @@ do {
                &&&    &
                 &&&    
     " -ForegroundColor Yellow
-    Write-Host "`n---Men?:" -ForegroundColor Blue
+    Write-Host "`n---Menu:" -ForegroundColor Blue
     Write-Host "---1. Systeminformationen anzeigen"
-    Write-Host "---2. Daten?bertragung starten"
-    Write-Host "---3. Festplattengesundheit ?berpr?fen"
-    Write-Host "---4. Tempor?re Dateien reinigen"
+    Write-Host "---2. Datenuebertragung starten"
+    Write-Host "---3. Festplattengesundheit ueberpruefen"
+    Write-Host "---4. Temporaere Dateien reinigen"
     Write-Host "---5. Wiederherstellungspunkt erstellen"
-    Write-Host "---6. Integrit?t der Systemdateien ?berpr?fen"
-    Write-Host "---7. Systemabbild ?berpr?fen und reparieren"
+    Write-Host "---6. Integritaet der Systemdateien ueberpruefen"
+    Write-Host "---7. Systemabbild ueberpruefen und reparieren"
     Write-Host "`n---C. Terminal leeren"
     Write-Host "---Q. Beenden"
-    $userInput = Read-Host "`nBitte w?hlen Sie eine Option"
+    $userInput = Read-Host "`nBitte waehlen Sie eine Option"
 
 
     switch ($userInput) {
@@ -270,7 +270,7 @@ do {
             break
         }
         default {
-            Write-Host "Ung?ltige Eingabe."
+            Write-Host "Ungueltige Eingabe."
         }
     }
 } while ($userInput -ne 'Q')
