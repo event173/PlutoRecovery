@@ -105,37 +105,47 @@ function SystemInfo {
 function DataTransfer {
 Write-Host "Datenuebertragungsskript wird gestartet..."
 Write-Host "Dieses Skript sichert die wichtigsten Daten eines Users"
-Get-ChildItem -Path "C:\Users" | Out-Host
+
+Write-Host "Von welcher Festplatte soll uebertragen werden?"
+Get-Volume | Select-Object DriveLetter | Out-Host
+Write-Host "Nenne den Buchstaben:"
+$askedVolume = Read-Host
+$sourcePath = $askedVolume + ":\Benutzer\"
+
+Get-ChildItem -Path $sourcePath | Out-Host
 Write-Host "Welcher User soll gesichert werden?"
 $askedUser = Read-Host
-$sourcePath = "C:\Users\" + $askedUser
+$sourcePath = $sourcePath + $askedUser
 
 
 Write-Host "Hat der User OneDrive? (J/N)"
 $hasOneDrive = Read-Host
 
+
 Write-Host "You chose $sourcePath"
 
 if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
     $sourceFolders = @(
-        "C:\Users\$askedUser\Onedrive\Desktop",
-        "C:\Users\$askedUser\Onedrive\Dokumente",
-        "C:\Users\$askedUser\Onedrive\Bilder",
-        "C:\Users\$askedUser\Downloads",
-        "C:\Users\$askedUser\Videos"
+        $sourcePath +"\Onedrive\Desktop";
+        $sourcePath +"\Onedrive\Dokumente";
+        $sourcePath +"\Onedrive\Bilder";
+        $sourcePath +"\Downloads";
+        $sourcePath +"\Videos"
     )
     Write-Host "Es wurde OneDrive ausgewaehlt" -ForegroundColor Yellow
 }
 else {
     $sourceFolders = @(
-        "C:\Users\$askedUser\Desktop",
-        "C:\Users\$askedUser\Dokumente",
-        "C:\Users\$askedUser\Bilder",
-        "C:\Users\$askedUser\Downloads",
-        "C:\Users\$askedUser\Videos"
+        $sourcePath +"\Desktop";
+        $sourcePath +"\Dokumente";
+        $sourcePath +"\Bilder";
+        $sourcePath +"\Downloads";
+        $sourcePath +"\Videos"
     )
     Write-Host "Es wurde kein OneDrive ausgewaehlt" -ForegroundColor Yellow
-    playSound
+    foreach ($folder in $sourceFolders) {
+        Write-Host $folder
+    }
 }
 
 
@@ -147,10 +157,10 @@ $destinationPath = $askedVolume + ":\"
 Write-Host "Destination is: $destinationPath"
 
 Write-Host "Welcher User bekommt die Daten?"
-$destinationPath = $askedVolume + ":\Users"
+$destinationPath = $askedVolume + ":\Benutzer"
 Get-ChildItem -Path $destinationPath | Out-Host
 $destinationUser = Read-Host
-$destinationPath = $askedVolume + ":\Users\" + $destinationUser
+$destinationPath = $askedVolume + ":\Benutzer\" + $destinationUser
 
 Write-Host "Soll von" $sourcePath "auf" $destinationPath "Uebertragen werden? (J/N)"
 $answer = Read-Host
@@ -166,6 +176,7 @@ else {
 
 
 Write-Host "Vorgang Abgeschlossen!"
+playSound
 }
 
 
@@ -228,16 +239,16 @@ do {
                &&&    &
                 &&&    
     " -ForegroundColor Yellow
-    Write-Host "`n__Menu:" -ForegroundColor Blue
-    Write-Host "__1. Systeminformationen anzeigen"
-    Write-Host "__2. Datenuebertragung starten"
-    Write-Host "__3. Festplattengesundheit ueberpruefen"
-    Write-Host "__4. Temporaere Dateien reinigen"
-    Write-Host "__5. Wiederherstellungspunkt erstellen"
-    Write-Host "__6. Integritaet der Systemdateien ueberpruefen"
-    Write-Host "__7. Systemabbild ueberpruefen und reparieren"
-    Write-Host "`n__C. Terminal leeren"
-    Write-Host "__Q. Beenden"
+    Write-Host "`nMenu:" -ForegroundColor Blue
+    Write-Host "1. Systeminformationen anzeigen"
+    Write-Host "2. Datenuebertragung starten"
+    Write-Host "3. Festplattengesundheit ueberpruefen"
+    Write-Host "4. Temporaere Dateien reinigen"
+    Write-Host "5. Wiederherstellungspunkt erstellen"
+    Write-Host "6. Integritaet der Systemdateien ueberpruefen"
+    Write-Host "7. Systemabbild ueberpruefen und reparieren"
+    Write-Host "`nC. Terminal leeren"
+    Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
 
 
