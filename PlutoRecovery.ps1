@@ -228,16 +228,16 @@ do {
                &&&    &
                 &&&    
     " -ForegroundColor Yellow
-    Write-Host "`n---Menu:" -ForegroundColor Blue
-    Write-Host "---1. Systeminformationen anzeigen"
-    Write-Host "---2. Datenuebertragung starten"
-    Write-Host "---3. Festplattengesundheit ueberpruefen"
-    Write-Host "---4. Temporaere Dateien reinigen"
-    Write-Host "---5. Wiederherstellungspunkt erstellen"
-    Write-Host "---6. Integritaet der Systemdateien ueberpruefen"
-    Write-Host "---7. Systemabbild ueberpruefen und reparieren"
-    Write-Host "`n---C. Terminal leeren"
-    Write-Host "---Q. Beenden"
+    Write-Host "`n__Menu:" -ForegroundColor Blue
+    Write-Host "__1. Systeminformationen anzeigen"
+    Write-Host "__2. Datenuebertragung starten"
+    Write-Host "__3. Festplattengesundheit ueberpruefen"
+    Write-Host "__4. Temporaere Dateien reinigen"
+    Write-Host "__5. Wiederherstellungspunkt erstellen"
+    Write-Host "__6. Integritaet der Systemdateien ueberpruefen"
+    Write-Host "__7. Systemabbild ueberpruefen und reparieren"
+    Write-Host "`n__C. Terminal leeren"
+    Write-Host "__Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
 
 
