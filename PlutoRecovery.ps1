@@ -1,4 +1,4 @@
-﻿
+
 #Script itself
 function TemporaryFiles {
     $confirmation = Read-Host "M?chten Sie wirklich alle tempor?ren Dateien l?schen? (J) (N)"
@@ -135,6 +135,7 @@ else {
         "C:\Users\$askedUser\Videos"
     )
     Write-Host "Es wurde kein OneDrive ausgew?hlt" -ForegroundColor Yellow
+    playSound
 }
 
 
@@ -172,9 +173,34 @@ function ClearScreen {
     Clear-Host
 }
 
+function playSound {
+    [Console]::Beep(658, 125)
+    [Console]::Beep(1320, 500)
+    [Console]::Beep(990, 250)
+    [Console]::Beep(1056, 250)
+    [Console]::Beep(1188, 250)
+    [Console]::Beep(1320, 125)
+    [Console]::Beep(1188, 125)
+    [Console]::Beep(1056, 250)
+    [Console]::Beep(990, 250)
+    [Console]::Beep(880, 500)
+    [Console]::Beep(880, 250)
+    [Console]::Beep(1056, 250)
+    [Console]::Beep(1320, 500)
+    [Console]::Beep(1188, 250)
+    [Console]::Beep(1056, 250)
+    [Console]::Beep(990, 750)
+    [Console]::Beep(1056, 250)
+    [Console]::Beep(1188, 500)
+    [Console]::Beep(1320, 500)
+    [Console]::Beep(1056, 500)
+    [Console]::Beep(880, 500)
+    [Console]::Beep(880, 500)
+}
 function systemIntegrity {
     Write-Host "Integrit?t der Systemdateien wird ?berpr?ft..."
     sfc /scannow
+    playSound
 }
 
 function DISMCheck {
@@ -187,30 +213,31 @@ function DISMCheck {
     }
 }
 do {
-    Write-Host "`n------------------------"
-    Write-Host "`nMen?:" -ForegroundColor Black -BackgroundColor Blue
-    Write-Host "1. Systeminformationen anzeigen"
-    Write-Host "2. Daten?bertragung starten"
-    Write-Host "3. Festplattengesundheit ?berpr?fen"
-    Write-Host "4. Tempor?re Dateien reinigen"
-    Write-Host "5. Wiederherstellungspunkt erstellen"
-    Write-Host "6. Integrit?t der Systemdateien ?berpr?fen"
-    Write-Host "7. Systemabbild ?berpr?fen und reparieren"
-    Write-Host "`nC. Terminal leeren"
-    Write-Host "Q. Beenden"
-
-    Write-Host "        ~+
-
-    *       +
-    '                  |
-()    .-.,="``"=.    - o -
-      '=/_       \     |
-   *   |  '=._    |
-        \     `=./`,        '
-     .   '=.__.=' `='      *
-+                         +
- O      *        '       .
-jgs  *        '       ."
+    Write-Host "
+    
+    &&&                
+&    &&&               
+&&&&&&&&               
+ &&&&&&&&              
+      &&&&&            
+        &&&&&                   PlutoRecovery
+          &&&&&        
+            &&&&&      
+              &&&&&&&& 
+               &&&&&&&&
+               &&&    &
+                &&&    
+    " -ForegroundColor Yellow
+    Write-Host "`n---Men?:" -ForegroundColor Blue
+    Write-Host "---1. Systeminformationen anzeigen"
+    Write-Host "---2. Daten?bertragung starten"
+    Write-Host "---3. Festplattengesundheit ?berpr?fen"
+    Write-Host "---4. Tempor?re Dateien reinigen"
+    Write-Host "---5. Wiederherstellungspunkt erstellen"
+    Write-Host "---6. Integrit?t der Systemdateien ?berpr?fen"
+    Write-Host "---7. Systemabbild ?berpr?fen und reparieren"
+    Write-Host "`n---C. Terminal leeren"
+    Write-Host "---Q. Beenden"
     $userInput = Read-Host "`nBitte w?hlen Sie eine Option"
 
 
