@@ -19,7 +19,7 @@ function TemporaryFiles {
         try {
             Get-ChildItem "C:\Windows\Temp" -Recurse | Remove-Item -Force -Recurse
             Get-ChildItem "C:\Users\*\AppData\Local\Temp" -Recurse | Remove-Item -Force -Recurse
-            Write-Host "Tempor?re Dateien erfolgreich gel?scht."
+            Write-Host "Temporaere Dateien erfolgreich geloescht."
         } catch {
             Write-Host "Es gab ein Problem beim Loeschen einiger Dateien."
         }
