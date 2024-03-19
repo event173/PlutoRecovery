@@ -1,4 +1,4 @@
-![Pluto transparent-min](https://github.com/event173/Powershell-Tools/assets/147558920/771841f2-f753-48eb-9403-0cda4725639c)
+![Pluto transparent git](https://github.com/event173/Powershell-Tools/assets/147558920/2cd90ea9-ebbe-420b-9efb-b324bf843b29)
 
 #PlutoRecovery
 
