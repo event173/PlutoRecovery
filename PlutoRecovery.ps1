@@ -30,6 +30,8 @@ function TemporaryFiles {
 
 
 function Wiederherstellungspunkt {
+
+Enable-ComputerRestore -Drive "C:\"
     # Definiert den Namen des Wiederherstellungspunktes
 $restorePointName = "MeinWiederherstellungspunkt_" + (Get-Date -Format "yyyyMMdd_HHmmss")
 
@@ -232,7 +234,7 @@ do {
  &&&&&&&&              
       &&&&&            
         &&&&&                   PlutoRecovery
-          &&&&&        
+          &&&&&                 Made by Nick
             &&&&&      
               &&&&&&&& 
                &&&&&&&&
