@@ -236,6 +236,7 @@ function systemIntegrity {
     sfc /scannow
 }
 
+
 function DISMCheck {
     # ?berpr?fen Sie die Gesundheit des Systemabbilds
     $checkHealthResult = & DISM /Online /Cleanup-Image /CheckHealth
@@ -256,6 +257,96 @@ function RAMResult {
 
 }
 
+function Zusammenfassung {
+    # Automatisiertes Systemaudit-Report-Skript
+
+# Pfad zur Ausgabedatei festlegen
+$outputPath = "C:\SystemAuditReport.txt"
+
+# Systeminformationen sammeln
+$systemInfo = Get-ComputerInfo | Select-Object CsManufacturer, CsModel, WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer
+
+# Installierte Software auflisten
+$installedSoftware = Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher | Where-Object {$_.DisplayName -ne $null}
+
+# Netzwerkinformationen sammeln
+$networkInfo = Get-NetIPConfiguration | Select-Object InterfaceAlias, InterfaceDescription, IPv4Address
+
+# Sicherheitseinstellungen prüfen
+# Beispiel: Windows Defender Status
+$defenderStatus = Get-Service -Name WinDefend | Select-Object Status
+
+
+
+$antivirusStatus = Get-MpComputerStatus | Select-Object AMProductVersion, AMServiceEnabled, NISEnabled, OnAccessProtectionEnabled
+$ramergebnis = Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-MemoryDiagnostics-Results'} | Select-Object -Property LevelDisplayName, Id, TimeCreated, Message, TaskDisplayName  | Format-List
+
+$cpuInfo = Get-WmiObject -Class Win32_Processor | Select-Object Name, Manufacturer, Description, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed
+$ramInfo = Get-WmiObject -Class Win32_PhysicalMemory | Select-Object Manufacturer, Capacity, Speed, DeviceLocator, SerialNumber | Measure-Object -Property Capacity -Sum
+$totalRAM = $ramInfo.Sum / 1GB
+$moboInfo = Get-WmiObject -Class Win32_BaseBoard | Select-Object Manufacturer, Product, SerialNumber
+$biosInfo = Get-WmiObject -Class Win32_BIOS | Select-Object Manufacturer, SMBIOSBIOSVersion, ReleaseDate, SerialNumber
+$diskInfo = Get-WmiObject -Class Win32_DiskDrive | Select-Object Model, InterfaceType, MediaType, Size | ForEach-Object {
+    $_ | Add-Member -NotePropertyName "SizeGB" -NotePropertyValue ([math]::round($_.Size / 1GB, 2)) -PassThru
+}
+$gpuInfo = Get-WmiObject -Class Win32_VideoController | Select-Object Name, Description, AdapterRAM, DriverVersion | ForEach-Object {
+    $_ | Add-Member -NotePropertyName "AdapterRAMGB" -NotePropertyValue ([math]::round($_.AdapterRAM / 1GB, 2)) -PassThru
+}
+$networkAdapterInfo = Get-WmiObject -Class Win32_NetworkAdapter | Where-Object { $_.NetEnabled -eq $true } | Select-Object Name, NetConnectionID, Speed
+
+
+
+
+# Ausgabe vorbereiten
+$report = @"
+SYSTEM-BERICHT
+--------------------
+
+Systeminformationen:
+--------------------
+Hersteller: $($systemInfo.CsManufacturer)
+Modell: $($systemInfo.CsModel)
+Produktname: $($systemInfo.WindowsProductName)
+Windows-Version: $($systemInfo.WindowsVersion)
+HAL-Version: $($systemInfo.OsHardwareAbstractionLayer)
+
+Hardware-Informationen:
+--------------------
+Prozessorinformationen
+$($cpuInfo | Format-List | Out-String)
+
+Speicher (RAM) Informationen: Gesamt RAM: $($totalRAM) GB
+$($ramInfo | Format-List | Out-String)
+
+Motherboard und BIOS-Informationen:
+$($moboInfo | Format-List | Out-String)
+$($biosInfo | Format-List | Out-String)
+
+Festplatten-Informationen:
+$($diskInfo | Format-List | Out-String)
+
+Grafikkarten-Informationen:
+$($gpuInfo | Format-List | Out-String)
+
+Netzwerkkarten-Informationen:
+$($networkAdapterInfo | Format-List | Out-String)
+--------------------
+
+RAM-Testergebnisse:
+$($ramergebnis | Out-String)
+--------------------
+Sicherheitseinstellungen:
+Windows Defender Status: $($defenderStatus.Status)
+Antivirus-Status: $antivirusStatus
+
+
+
+"@
+
+$report | Out-File -FilePath $outputPath
+Invoke-Item $outputPath
+
+}
 
 
 do {
@@ -283,7 +374,8 @@ do {
     Write-Host "6. Integritaet der Systemdateien ueberpruefen"
     Write-Host "7. Systemabbild ueberpruefen und reparieren"
     Write-Host "8. RAM Testen"
-    Write-Host "9. RAM Testergebnisse anzeigen"
+    Write-Host "9. RAM Testergebnisse anzeigen"#
+    Write-Host "0. Systemzusammenfassung erstellen"
     Write-Host "`nC. Terminal leeren"
     Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
@@ -316,6 +408,9 @@ do {
         }
         '9' {
             RAMResult
+        }
+        '0' {
+            Zusammenfassung
         }
         'c' {
             ClearScreen
