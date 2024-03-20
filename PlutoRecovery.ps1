@@ -101,7 +101,7 @@ function SystemInfo {
     Write-Host "Arbeitsspeicherinformationen:"
     $ramInfo | ForEach-Object {
         $capacityGB = [math]::round($_.Capacity / 1GB, 2)
-        Write-Host "Kapazit?t: $capacityGB GB, Geschwindigkeit: $($_.Speed) MHz, Hersteller: $($_.Manufacturer), Seriennummer: $($_.SerialNumber)"
+        Write-Host "Kapazitaet: $capacityGB GB, Geschwindigkeit: $($_.Speed) MHz, Hersteller: $($_.Manufacturer), Seriennummer: $($_.SerialNumber)"
     }
 }
 function DataTransfer {
@@ -129,8 +129,8 @@ Write-Host "You chose $sourcePath"
 if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
     $sourceFolders = @(
         $sourcePath +"\Onedrive\Desktop";
-        $sourcePath +"\Onedrive\Dokumente";
-        $sourcePath +"\Onedrive\Bilder";
+        $sourcePath +"\Onedrive\Documents";
+        $sourcePath +"\Onedrive\Pictures";
         $sourcePath +"\Downloads";
         $sourcePath +"\Videos"
     )
@@ -143,8 +143,8 @@ if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
 else {
     $sourceFolders = @(
         $sourcePath +"\Desktop";
-        $sourcePath +"\Dokumente";
-        $sourcePath +"\Bilder";
+        $sourcePath +"\Documents";
+        $sourcePath +"\Pictures";
         $sourcePath +"\Downloads";
         $sourcePath +"\Videos"
     )
@@ -227,7 +227,7 @@ function DISMCheck {
     $checkHealthResult = & DISM /Online /Cleanup-Image /CheckHealth
     DISM /Online /Cleanup-Image /ScanHealth
     # Wenn der CheckHealth-Befehl eine Besch?digung gefunden hat, f?hren Sie den RestoreHealth-Befehl aus
-    if ($checkHealthResult -like '*Die Komponentenspeicher ist reparierbar*') {
+    if ($checkHealthResult -like '*Der Komponentenspeicher ist reparierbar*') {
         & DISM /Online /Cleanup-Image /RestoreHealth
     }
 }
