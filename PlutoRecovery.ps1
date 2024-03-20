@@ -112,7 +112,7 @@ Write-Host "Von welcher Festplatte soll uebertragen werden?"
 Get-Volume | Select-Object DriveLetter | Out-Host
 Write-Host "Nenne den Buchstaben:"
 $askedVolume = Read-Host
-$sourcePath = $askedVolume + ":\Benutzer\"
+$sourcePath = $askedVolume + ":\Users\"
 
 Get-ChildItem -Path $sourcePath | Out-Host
 Write-Host "Welcher User soll gesichert werden?"
