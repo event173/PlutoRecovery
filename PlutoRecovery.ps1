@@ -120,17 +120,26 @@ $askedUser = Read-Host
 $sourcePath = $sourcePath + $askedUser
 
 
+
+Write-Host "Folgende Ordner sind vorhanden:"
+Get-ChildItem -Path $sourcePath | Out-Host
+$oneDrivePreview = $sourcePath + "\OneDrive"
+Write-Host "Folgende Ordner sind in Onedrive vorhanden:"
+Get-ChildItem -Path $oneDrivePreview | Out-Host
+
 Write-Host "Hat der User OneDrive? (J/N)"
 $hasOneDrive = Read-Host
 
 
-Write-Host "You chose $sourcePath"
+
+Write-Host "You chose $sourcePath"  # bsp.: C:\Users\User
+
 
 if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
     $sourceFolders = @(
         $sourcePath +"\Onedrive\Desktop";
-        $sourcePath +"\Onedrive\Documents";
-        $sourcePath +"\Onedrive\Pictures";
+        $sourcePath +"\Onedrive\Dokumente";
+        $sourcePath +"\Onedrive\Bilder";
         $sourcePath +"\Downloads";
         $sourcePath +"\Videos"
     )
@@ -231,6 +240,18 @@ function DISMCheck {
         & DISM /Online /Cleanup-Image /RestoreHealth
     }
 }
+
+
+function RAMTest {
+    mdsched.exe
+}
+
+function RAMResult {
+    Get-WinEvent -LogName "System" -ProviderName "MemoryDiagnostics-Results" | Select-Object TimeCreated, Message | Out-Host
+}
+
+
+
 do {
     Write-Host "
     
@@ -255,6 +276,8 @@ do {
     Write-Host "5. Wiederherstellungspunkt erstellen"
     Write-Host "6. Integritaet der Systemdateien ueberpruefen"
     Write-Host "7. Systemabbild ueberpruefen und reparieren"
+    Write-Host "8. RAM Testen"
+    Write-Host "9. RAM Testergebnisse anzeigen"
     Write-Host "`nC. Terminal leeren"
     Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
@@ -281,6 +304,12 @@ do {
         }
         '7' {
             DISMCHeck
+        }
+        '8' {
+            RAMTest
+        }
+        '9' {
+            RAMResult
         }
         'c' {
             ClearScreen
