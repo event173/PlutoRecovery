@@ -164,10 +164,10 @@ $destinationPath = $askedVolume + ":\"
 Write-Host "Destination is: $destinationPath"
 
 Write-Host "Welcher User bekommt die Daten?"
-$destinationPath = $askedVolume + ":\Benutzer"
+$destinationPath = $askedVolume + ":\Users\"
 Get-ChildItem -Path $destinationPath | Out-Host
 $destinationUser = Read-Host
-$destinationPath = $askedVolume + ":\Benutzer\" + $destinationUser
+$destinationPath = $askedVolume + ":\Users\" + $destinationUser
 
 Write-Host "Soll von" $sourcePath "auf" $destinationPath "Uebertragen werden? (J/N)"
 $answer = Read-Host
