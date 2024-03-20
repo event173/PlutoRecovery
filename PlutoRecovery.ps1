@@ -120,13 +120,6 @@ $askedUser = Read-Host
 $sourcePath = $sourcePath + $askedUser
 
 
-
-Write-Host "Folgende Ordner sind vorhanden:"
-Get-ChildItem -Path $sourcePath | Out-Host
-$oneDrivePreview = $sourcePath + "\OneDrive"
-Write-Host "Folgende Ordner sind in Onedrive vorhanden:"
-Get-ChildItem -Path $oneDrivePreview | Out-Host
-
 Write-Host "Hat der User OneDrive? (J/N)"
 $hasOneDrive = Read-Host
 
@@ -141,7 +134,14 @@ if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
         $sourcePath +"\Onedrive\Dokumente";
         $sourcePath +"\Onedrive\Bilder";
         $sourcePath +"\Downloads";
+        $sourcePath +"\Contacts";
+        $sourcePath +"\Favorites";
+        $sourcePath +"\Links";
+        $sourcePath +"\Saved Games";
+        $sourcePath +"\Searches";
+        $sourcePath +"\Music";
         $sourcePath +"\Videos"
+
     )
     Write-Host "Es wurde OneDrive ausgewaehlt" -ForegroundColor Yellow
     Write-Host "Folgende Ordner werden gesichert:"
@@ -155,6 +155,12 @@ else {
         $sourcePath +"\Documents";
         $sourcePath +"\Pictures";
         $sourcePath +"\Downloads";
+        $sourcePath +"\Contacts";
+        $sourcePath +"\Favorites";
+        $sourcePath +"\Links";
+        $sourcePath +"\Saved Games";
+        $sourcePath +"\Searches";
+        $sourcePath +"\Music";
         $sourcePath +"\Videos"
     )
     Write-Host "Es wurde kein OneDrive ausgewaehlt" -ForegroundColor Yellow
@@ -228,7 +234,6 @@ function playSound {
 function systemIntegrity {
     Write-Host "Integritaet der Systemdateien wird ueberprueft..."
     sfc /scannow
-    playSound
 }
 
 function DISMCheck {
@@ -247,7 +252,8 @@ function RAMTest {
 }
 
 function RAMResult {
-    Get-WinEvent -LogName "System" -ProviderName "MemoryDiagnostics-Results" | Select-Object TimeCreated, Message | Out-Host
+    Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-MemoryDiagnostics-Results'} | Select-Object -Property LevelDisplayName, Id, TimeCreated, Message, TaskDisplayName  | Format-List
+
 }
 
 
