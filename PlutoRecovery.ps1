@@ -200,8 +200,13 @@ $answer = Read-Host
 
 if ($answer -eq "J" -or $answer -eq "j") {
     foreach ($sourceFolder in $sourceFolders) {
-        Write-Host "Kopiere $sourceFolder nach $destinationPath"
-        Copy-Item -Path $sourceFolder -Destination $destinationPath -Recurse -Force
+        try {
+            Write-Host "Kopiere $sourceFolder nach $destinationPath"
+            Copy-Item -Path $sourceFolder -Destination $destinationPath -Recurse -Force -ErrorAction Stop
+        }
+        catch {
+            Write-Output "Fehler beim Kopieren des Ordners '$sourceFolder': $($_.Exception.Message)"
+        }
     }
 }
 else {
