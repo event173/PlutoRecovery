@@ -51,6 +51,12 @@ SerialNumber      : FRANMCCPA6329100R6
 
 Festplatten-Informationen:
 
+Model         : Generic Flash Disk USB Device
+InterfaceType : USB
+MediaType     : Removable Media
+Size          : 62906941440
+SizeGB        : 58,59
+
 Model         : WD_BLACK SN770 500GB
 InterfaceType : SCSI
 MediaType     : Fixed hard disk media
@@ -73,7 +79,7 @@ Netzwerkkarten-Informationen:
 
 Name            : Intel(R) Wi-Fi 6E AX210 160MHz
 NetConnectionID : WLAN
-Speed           : 1560000000
+Speed           : 955500000
 
 
 --------------------
