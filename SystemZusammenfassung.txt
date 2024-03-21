@@ -1,0 +1,102 @@
+SYSTEM-BERICHT
+--------------------
+
+Systeminformationen:
+--------------------
+Hersteller: Framework
+Modell: Laptop (13th Gen Intel Core)
+Produktname: Windows 10 Pro
+Windows-Version: 2009
+HAL-Version: 10.0.22621.2506
+
+Hardware-Informationen:
+--------------------
+Prozessorinformationen
+
+Name                      : 13th Gen Intel(R) Core(TM) i7-1360P
+Manufacturer              : GenuineIntel
+Description               : Intel64 Family 6 Model 186 Stepping 2
+NumberOfCores             : 12
+NumberOfLogicalProcessors : 16
+MaxClockSpeed             : 2200
+
+
+
+Speicher (RAM) Informationen: Gesamt RAM: 16 GB
+
+Count             : 2
+Average           : 
+Sum               : 17179869184
+Maximum           : 
+Minimum           : 
+StandardDeviation : 
+Property          : Capacity
+
+
+
+Motherboard und BIOS-Informationen:
+
+Manufacturer : Framework
+Product      : FRANMCCP06
+SerialNumber : FRANMCCPA6329100R6
+
+
+
+Manufacturer      : INSYDE Corp.
+SMBIOSBIOSVersion : 03.04
+ReleaseDate       : 20230524000000.000000+000
+SerialNumber      : FRANMCCPA6329100R6
+
+
+
+Festplatten-Informationen:
+
+Model         : WD_BLACK SN770 500GB
+InterfaceType : SCSI
+MediaType     : Fixed hard disk media
+Size          : 500105249280
+SizeGB        : 465,76
+
+
+
+Grafikkarten-Informationen:
+
+Name          : Intel(R) Iris(R) Xe Graphics
+Description   : Intel(R) Iris(R) Xe Graphics
+AdapterRAM    : 134217728
+DriverVersion : 31.0.101.5186
+AdapterRAMGB  : 0,12
+
+
+
+Netzwerkkarten-Informationen:
+
+Name            : Intel(R) Wi-Fi 6E AX210 160MHz
+NetConnectionID : WLAN
+Speed           : 1560000000
+
+
+--------------------
+
+RAM-Testergebnisse:
+
+LevelDisplayName : Informationen
+Id               : 1201
+TimeCreated      : 20.03.2024 15:59:44
+Message          : Der Arbeitsspeicher des Computers wurde von der Windows-Speicherdiagnose überprüft, und es wurden keine Fehler festgestellt.
+TaskDisplayName  : 
+
+LevelDisplayName : Informationen
+Id               : 1101
+TimeCreated      : 20.03.2024 15:59:44
+Message          : Der Arbeitsspeicher des Computers wurde von der Windows-Speicherdiagnose überprüft, und es wurden keine Fehler festgestellt.
+TaskDisplayName  : 
+
+
+--------------------
+Sicherheitseinstellungen:
+Windows Defender Status: Running
+Antivirus-Status: @{AMProductVersion=4.18.24020.7; AMServiceEnabled=True; NISEnabled=True; OnAccessProtectionEnabled=True}
+
+
+

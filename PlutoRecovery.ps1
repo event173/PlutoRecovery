@@ -272,7 +272,7 @@ function Zusammenfassung {
     # Automatisiertes Systemaudit-Report-Skript
 
 # Pfad zur Ausgabedatei festlegen
-$outputPath = "C:\SystemZusammenfassung.txt"
+$outputPath = Join-Path -Path $PSScriptRoot -ChildPath "SystemZusammenfassung.txt"
 
 # Systeminformationen sammeln
 $systemInfo = Get-ComputerInfo | Select-Object CsManufacturer, CsModel, WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer
