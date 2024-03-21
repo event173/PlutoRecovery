@@ -1,6 +1,7 @@
 
 #Script itself
 function TemporaryFiles {
+    ClearScreen
     $confirmation = Read-Host "Moechten Sie wirklich alle temporaeren Dateien loeschen? (J) (N)"
     if ($confirmation -eq 'J' -or $confirmation -eq 'j') {
         Write-Host "Temporaere Dateien werden gereinigt..."
@@ -37,11 +38,13 @@ function TemporaryFiles {
     } else {
         Write-Host "Loeschen der temporaeren Dateien abgebrochen."
     }
+    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
 
 
 function Wiederherstellungspunkt {
-
+    ClearScreen
+    Write-Host "Wiederherstellungspunkt wird erstellt..."
 Enable-ComputerRestore -Drive "C:\"
     # Definiert den Namen des Wiederherstellungspunktes
 $restorePointName = "MeinWiederherstellungspunkt_" + (Get-Date -Format "yyyyMMdd_HHmmss")
@@ -53,9 +56,11 @@ try {
 } catch {
     Write-Error "Fehler beim Erstellen des Wiederherstellungspunktes: $_"
 }
+Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
 
 function DiskHealth{
+    ClearScreen
     Write-Host "Festplattengesundheit wird ueberprueft..."
     Get-PhysicalDisk | Select-Object FriendlyName, Size, MediaType, OperationalStatus, HealthStatus | Out-Host
 
@@ -73,8 +78,12 @@ foreach ($disk in $physicalDisks) {
     }
 
 }
+Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
+
+
 function SystemInfo {
+    ClearScreen
     Write-Host "Systeminformationen werden geladen..."
     $info = Get-ComputerInfo | Select-Object `
         OSName, `
@@ -109,13 +118,17 @@ function SystemInfo {
     Write-Host "Grafikkarteninformationen:"
     $gpuInfo | Format-Table -AutoSize
 
-    Write-Host "Arbeitsspeicherinformationen:"
+    Write-Host "Arbeitsspeicherinformationen:" -ForegroundColor Green
     $ramInfo | ForEach-Object {
         $capacityGB = [math]::round($_.Capacity / 1GB, 2)
         Write-Host "Kapazitaet: $capacityGB GB, Geschwindigkeit: $($_.Speed) MHz, Hersteller: $($_.Manufacturer), Seriennummer: $($_.SerialNumber)"
     }
+    playSound
+    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
+
 function DataTransfer {
+    ClearScreen
 Write-Host "Datenuebertragungsskript wird gestartet..."
 Write-Host "Dieses Skript sichert die wichtigsten Daten eines Users"
 
@@ -216,6 +229,7 @@ else {
 
 Write-Host "Vorgang Abgeschlossen!"
 playSound
+Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
 
 
@@ -248,12 +262,15 @@ function playSound {
     [Console]::Beep(880, 500)
 }
 function systemIntegrity {
+    ClearScreen
     Write-Host "Integritaet der Systemdateien wird ueberprueft..."
     sfc /scannow
+    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
 
 
 function DISMCheck {
+    ClearScreen
     # ?berpr?fen Sie die Gesundheit des Systemabbilds
     $checkHealthResult = & DISM /Online /Cleanup-Image /CheckHealth
     DISM /Online /Cleanup-Image /ScanHealth
@@ -261,6 +278,7 @@ function DISMCheck {
     if ($checkHealthResult -like '*Der Komponentenspeicher ist reparierbar*') {
         & DISM /Online /Cleanup-Image /RestoreHealth
     }
+    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
 
 
@@ -269,8 +287,9 @@ function RAMTest {
 }
 
 function RAMResult {
+    ClearScreen
     Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-MemoryDiagnostics-Results'} | Select-Object -Property LevelDisplayName, Id, TimeCreated, Message, TaskDisplayName  | Format-List
-
+    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
 }
 
 function Zusammenfassung {
@@ -366,17 +385,67 @@ Invoke-Item $outputPath
 
 
 function Win11 {
+    ClearScreen
     Write-Host "Windows 11 Upgrade wird gestartet..."
+    Get-Volume | Select-Object DriveLetter | Out-Host
     $usbBuchstabe = Read-Host "Bitte geben Sie den Buchstaben des USB-Sticks ein"
     $usbPfad = $usbBuchstabe + ":\Windows11"
-
-    Copy-Item -Path $usbPfad -Destination "C:" -Recurse -Force -ErrorAction Stop
+    Write-Host "Lade Daten..."
+    Copy-Item -Path $usbPfad -Destination "C:\" -Recurse -Force -ErrorAction Stop
 
     Start-Process -FilePath "C:\Windows11\setup.exe" -ArgumentList "/product server"
 }
 
+function Win11info {
+    ClearScreen
+    Write-Host "Windows 11 Upgrade Information" -ForegroundColor Yellow
+    Write-Host "`nUm PlutoRecovery zum Upgraden auf Windows 11 zu verwenden, lege`ndas Programm auf einen USB-Stick in das Rootverzeichnis."
+    Write-Host "`nNun lege einen Ordner namens 'Windows11' auf den USB-Stick an."
+    Write-Host "`nLade die aktuelle Windows-ISO unter https://www.microsoft.com/de-de/software-download/windows11 herunter."
+    Write-Host "`nÖffne die ISO und kopiere alle Dateien in den Ordner 'Windows11' auf dem USB-Stick."
+    Write-Host "`nNun kannst du den USB-Stick in den PC stecken und das Programm als Administrator starten."
+    Write-Host "Das Upgrade funktioniert nun ueber den Menuepunkt 'U'"
+    Write-Host "`nHinweis:" -ForegroundColor Yellow
+    Write-Host "Das programm wird anzeigen, dass es sich um ein Upgrade vom Windows Server handelt, dies`nist normal und kann ignoriert werden."
+    Write-Host "Es wird Home oder Pro installiert, je nachdem, welche Version du vorher hattest."
+    Write-Host "`nEs wird empfohlen, vor dem Upgrade ein Backup zu erstellen."
+    Read-Host "`nDruecke Enter..."
+}
+function tempinfo {
+    ClearScreen
+    Write-Host "Nicht alle Temporaeren Dateien konnten geloescht werden" -ForegroundColor Yellow
+    Write-Host "`n Das ist Normal, keine Sorge."
+    Write-Host "Grund dafuer ist, dass einige Dateien von Programmen verwendet werden und nicht geloescht werden koennen."
+    Write-Host "PlutoRecovery bemueht sich, so viele Dateien wie moeglich zu loeschen, in dem es Programme beendet, die diese Dateien verwenden."
+    Write-Host "Es gibt aber auch Dateien, die von Windows verwendet werden und nicht geloescht werden koennen."
+    Read-Host "`nDruecke Enter..."
+}
+function Information {
+    do{
+        ClearScreen
+        Write-Host "Wie kann ich dir helfen?" -ForegroundColor Yellow
+        Write-Host "`n1. Wie kann ich mein System auf Win 11 Upgraden?"
+        Write-Host "2. Es konnten nicht alle Temporaeren Dateien geloescht werden"
+        Write-Host "Q. Zum Hauptbildschirm zurueckkehren"
+        $userInput = Read-Host "`nBitte waehle eine Option"
+    
+
+    switch($userInput) {
+        '1' {
+            Win11info
+        } 
+        '2' {
+            tempinfo
+        }	
+    
+    }
+
+} while ($userInput -ne 'Q')
+}
+
 
 do {
+    ClearScreen
     Write-Host "
     
     &&&                
@@ -404,6 +473,7 @@ do {
     Write-Host "9. RAM Testergebnisse anzeigen"#
     Write-Host "0. Systemzusammenfassung erstellen"
     Write-Host "`nU. Windows 11 Upgrade auf nicht kompatibler Hardware starten"
+    Write-Host "`ni. Information"
     Write-Host "`nC. Terminal leeren"
     Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
@@ -440,13 +510,16 @@ do {
         '0' {
             Zusammenfassung
         }
-        'U' {
+        'u' {
             Win11
+        }
+        'i' {
+            Information
         }
         'c' {
             ClearScreen
         }
-        'Q' {
+        'q' {
             break
         }
         default {
