@@ -7,5 +7,5 @@ PlutoRecovery ist mein Skript, dass ich als Teil meines Abschlussprojektes entwo
 Es ist zwar für unsere Computerwerkstatt ein hilfreiches Tool, das oft Benutzung findet, jedoch für den anderen Techniker und dessen Vorgehensweise möglicherweise nicht sehr hilfreich.
 Nichtsdestotrotz hatte ich sehr viel spaß beim erstellen dieses Skriptes :)
 
-Da das Skript nicht signiert ist, wird es als Virus "erkannt". Ihr könnt natürlich auch die .ps1 direkt von der Powershell aus starten. Einfach und schneller ist die .exe.
+Da das Skript nicht signiert ist, wird es als Virus "erkannt". Ihr könnt natürlich auch die .ps1 direkt von der Powershell aus starten. Einfacher und schneller ist die .exe.
 Falls ihr euch nicht sicher seid, könnt ihr euch den Quellcode des Skripts genauer anschauen.
