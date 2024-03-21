@@ -271,6 +271,11 @@ function RAMResult {
 function Zusammenfassung {
     # Automatisiertes Systemaudit-Report-Skript
 
+
+# Pfad zur ausführbaren Datei ermitteln
+$exePath = [System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName
+$exeDirectory = Split-Path -Path $exePath -Parent    
+
 # Pfad zur Ausgabedatei festlegen
 $outputPath = Join-Path -Path $PSScriptRoot -ChildPath "SystemZusammenfassung.txt"
 
