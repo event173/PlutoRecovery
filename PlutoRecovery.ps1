@@ -9,20 +9,31 @@ function TemporaryFiles {
         $tasksToTerminate = @("msedgewebview2", "Creative Cloud", "msedge", "CoreSync", "OfficeClickToRun", "steam", "steamwebhelper", "steamservice", "Discord", "Spotify")
 
         foreach ($task in $tasksToTerminate) {
-            $terminateTask = Get-Process -Name $task -ErrorAction SilentlyContinue
-            if ($terminateTask) {
-                $terminateTask | Stop-Process -Force
-                Write-Host "Task $task has been terminated successfully."
+            try {
+                $terminateTask = Get-Process -Name $task -ErrorAction SilentlyContinue
+                if ($terminateTask) {
+                    $terminateTask | Stop-Process -Force
+                    Write-Host "Task $task has been terminated successfully."
+                }
+            } catch {
+                Write-Host "Failed to terminate task $task."
             }
         }
 
-        try {
-            Get-ChildItem "C:\Windows\Temp" -Recurse | Remove-Item -Force -Recurse
-            Get-ChildItem "C:\Users\*\AppData\Local\Temp" -Recurse | Remove-Item -Force -Recurse
-            Write-Host "Temporaere Dateien erfolgreich geloescht."
-        } catch {
-            Write-Host "Es gab ein Problem beim Loeschen einiger Dateien."
+        $tempDirectories = @("C:\Windows\Temp", "C:\Users\*\AppData\Local\Temp")
+
+        foreach ($dir in $tempDirectories) {
+            Get-ChildItem $dir -Recurse | ForEach-Object {
+                $currentItem = $_
+                try {
+                    Remove-Item $currentItem.FullName -Force -Recurse -ErrorAction Stop
+                } catch {
+                    Write-Host "Failed to delete file $($currentItem.FullName)."
+                }
+            }
         }
+
+        Write-Host "Temporaere Dateien erfolgreich geloescht."
     } else {
         Write-Host "Loeschen der temporaeren Dateien abgebrochen."
     }
@@ -261,7 +272,7 @@ function Zusammenfassung {
     # Automatisiertes Systemaudit-Report-Skript
 
 # Pfad zur Ausgabedatei festlegen
-$outputPath = "C:\SystemAuditReport.txt"
+$outputPath = "C:\SystemZusammenfassung.txt"
 
 # Systeminformationen sammeln
 $systemInfo = Get-ComputerInfo | Select-Object CsManufacturer, CsModel, WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer
@@ -423,10 +434,3 @@ do {
         }
     }
 } while ($userInput -ne 'Q')
-
-
-
-# Wiederherstellungspunkt
-# Desktopsymbole
-# Festplattenoptimierung ausschalten
-# Bloatware entfernen
