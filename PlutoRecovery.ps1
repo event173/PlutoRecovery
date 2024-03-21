@@ -365,6 +365,17 @@ Invoke-Item $outputPath
 }
 
 
+function Win11 {
+    Write-Host "Windows 11 Upgrade wird gestartet..."
+    $usbBuchstabe = Read-Host "Bitte geben Sie den Buchstaben des USB-Sticks ein"
+    $usbPfad = $usbBuchstabe + ":\Windows11"
+
+    Copy-Item -Path $usbPfad -Destination "C:" -Recurse -Force -ErrorAction Stop
+
+    Start-Process -FilePath "C:\Windows11\setup.exe" -ArgumentList "/product server"
+}
+
+
 do {
     Write-Host "
     
@@ -392,6 +403,7 @@ do {
     Write-Host "8. RAM Testen"
     Write-Host "9. RAM Testergebnisse anzeigen"#
     Write-Host "0. Systemzusammenfassung erstellen"
+    Write-Host "`nU. Windows 11 Upgrade auf nicht kompatibler Hardware starten"
     Write-Host "`nC. Terminal leeren"
     Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
@@ -427,6 +439,9 @@ do {
         }
         '0' {
             Zusammenfassung
+        }
+        'U' {
+            Win11
         }
         'c' {
             ClearScreen
