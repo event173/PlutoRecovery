@@ -270,11 +270,16 @@ function systemIntegrity { # Funktion zur Ueberpruefung der Systemintegritaet
 function DISMCheck {    
     ClearScreen
     # ueberpruefen des Systemabbilds
-    $checkHealthResult = & DISM /Online /Cleanup-Image /CheckHealth
+    DISM /Online /Cleanup-Image /CheckHealth
     DISM /Online /Cleanup-Image /ScanHealth
-    # Wenn der CheckHealth-Befehl eine Beschaedigung gefunden hat, fuehrt es den RestoreHealth-Befehl aus
-    if ($checkHealthResult -like '*Der Komponentenspeicher ist reparierbar*') {
-        & DISM /Online /Cleanup-Image /RestoreHealth
+    # Frage, ob das Systemabbild repariert werden soll
+    Write-Host "Soll das Systemabbild repariert werden? (J/N)"
+    $answer = Read-Host
+    if ($answer -eq "J" -or $answer -eq "j") {
+        DISM /Online /Cleanup-Image /RestoreHealth
+    }
+    else {
+        break
     }
     playSound
     Read-Host "Druecke Enter..."
