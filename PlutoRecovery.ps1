@@ -6,9 +6,10 @@ function TemporaryFiles {
     if ($confirmation -eq 'J' -or $confirmation -eq 'j') {
         Write-Host "Temporaere Dateien werden gereinigt..."
 
-        # List of tasks to terminate
+        # Anwenudngen, die beendet werden sollen
         $tasksToTerminate = @("msedgewebview2", "Creative Cloud", "msedge", "CoreSync", "OfficeClickToRun", "steam", "steamwebhelper", "steamservice", "Discord", "Spotify")
 
+        # Beenden der Anwendungen
         foreach ($task in $tasksToTerminate) {
             try {
                 $terminateTask = Get-Process -Name $task -ErrorAction SilentlyContinue
@@ -20,9 +21,9 @@ function TemporaryFiles {
                 Write-Host "Failed to terminate task $task."
             }
         }
-
+        # Pfade zu den temporaeren Dateien
         $tempDirectories = @("C:\Windows\Temp", "C:\Users\*\AppData\Local\Temp")
-
+        # Loeschen der temporaeren Dateien
         foreach ($dir in $tempDirectories) {
             Get-ChildItem $dir -Recurse | ForEach-Object {
                 $currentItem = $_
@@ -45,32 +46,40 @@ function TemporaryFiles {
 function Wiederherstellungspunkt {
     ClearScreen
     Write-Host "Wiederherstellungspunkt wird erstellt..."
-Enable-ComputerRestore -Drive "C:\"
-    # Definiert den Namen des Wiederherstellungspunktes
-$restorePointName = "MeinWiederherstellungspunkt_" + (Get-Date -Format "yyyyMMdd_HHmmss")
 
-# Versucht, einen Wiederherstellungspunkt zu erstellen
+    # Aktiviert die Systemwiederherstellung auf dem Laufwerk C:
+    Enable-ComputerRestore -Drive "C:\"
+
+    # Definiert den Namen des Wiederherstellungspunktes
+    $restorePointName = "MeinWiederherstellungspunkt_" + (Get-Date -Format "yyyyMMdd_HHmmss")
+
+    # Versucht, einen Wiederherstellungspunkt zu erstellen
 try {
     Checkpoint-Computer -Description $restorePointName -RestorePointType "MODIFY_SETTINGS"
     Write-Host "Wiederherstellungspunkt erfolgreich erstellt: $restorePointName"
 } catch {
-    Write-Error "Fehler beim Erstellen des Wiederherstellungspunktes: $_"
+    Write-Error "Fehler beim Erstellen des Wiederherstellungspunktes: $_"   # $_ ist die Fehlermeldung
 }
-Read-Host "Druecke Enter..."
+    Read-Host "Druecke Enter..."
 }
 
 function DiskHealth{
     ClearScreen
     Write-Host "Festplattengesundheit wird ueberprueft..."
+
+    # Festplatteninformationen abrufen: FriendlyName ist der Name des Laufwerks
+    #Size ist die Groesse, MediaType ist der Medientyp, OperationalStatus ist der Betriebsstatus und HealthStatus ist der Gesundheitsstatus
     Get-PhysicalDisk | Select-Object FriendlyName, Size, MediaType, OperationalStatus, HealthStatus | Out-Host
 
+    # Alle physischen Festplatten abrufen und chkdsk ausfuehren
     $physicalDisks = Get-PhysicalDisk
     chkdsk /f /r
 
+    # Informationen zu den einzelnen Festplatten und Partitionen ausgeben
 foreach ($disk in $physicalDisks) {
     Write-Host "Laufwerk: $($disk.FriendlyName), Size: $($disk.Size), Medientyp: $($disk.MediaType), Betriebsstatus: $($disk.OperationalStatus), Gesundheitsstatus: $($disk.HealthStatus)"
     
-    # Abrufen der Partitionen f?r das aktuelle Laufwerk
+    # Abrufen der Partitionen fuer das aktuelle Laufwerk
     $partitions = Get-Partition | Where-Object { $_.DiskNumber -eq $disk.DeviceID }
     
     foreach ($partition in $partitions) {
@@ -85,6 +94,8 @@ Read-Host "Druecke Enter..."
 function SystemInfo {
     ClearScreen
     Write-Host "Systeminformationen werden geladen..."
+
+    # Systeminformationen abrufen
     $info = Get-ComputerInfo | Select-Object `
         OSName, `
         WindowsProductName, `
@@ -98,20 +109,21 @@ function SystemInfo {
         CsProcessors, `
         CsNumberOfLogicalProcessors
 
-    # Grafikkarteninformationen
+    # Grafikkarteninformationen abrufen
     $gpuInfo = Get-CimInstance -ClassName CIM_VideoController | Select-Object `
         Name, `
         DriverVersion, `
         AdapterRAM, `
         VideoProcessor
 
-    # Arbeitsspeicherinformationen
+    # Arbeitsspeicherinformationen abrufen
     $ramInfo = Get-CimInstance -ClassName CIM_PhysicalMemory | Select-Object `
         Capacity, `
         Speed, `
         Manufacturer, `
         SerialNumber
 
+    # Ausgabe der Informationen ------------------------------------------------------------
     Write-Host "Systeminformationen:"
     $info | Format-List
 
@@ -132,18 +144,21 @@ function DataTransfer {
 Write-Host "Datenuebertragungsskript wird gestartet..."
 Write-Host "Dieses Skript sichert die wichtigsten Daten eines Users"
 
+
 Write-Host "Von welcher Festplatte soll uebertragen werden?"
+# Alle Laufwerke auflisten ------------------------------------------------------------
 Get-Volume | Select-Object DriveLetter | Out-Host
 Write-Host "Nenne den Buchstaben:"
 $askedVolume = Read-Host
-$sourcePath = $askedVolume + ":\Users\"
+$sourcePath = $askedVolume + ":\Users\" # Pfad zu den Usern auf der Festplatte hinzufuegen
 
+# Alle User auflisten ------------------------------------------------------------
 Get-ChildItem -Path $sourcePath | Out-Host
 Write-Host "Welcher User soll gesichert werden?"
 $askedUser = Read-Host
 $sourcePath = $sourcePath + $askedUser
 
-
+# Pruefen, ob der User OneDrive hat ------------------------------------------------------------
 Write-Host "Hat der User OneDrive? (J/N)"
 $hasOneDrive = Read-Host
 
@@ -151,7 +166,7 @@ $hasOneDrive = Read-Host
 
 Write-Host "You chose $sourcePath"  # bsp.: C:\Users\User
 
-
+# Pfade zu den zu sichernden Ordnern ------------------------------------------------------------
 if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
     $sourceFolders = @(
         $sourcePath +"\Onedrive\Desktop";
@@ -194,7 +209,7 @@ else {
     }
 }
 
-
+# Zielordner festlegen ------------------------------------------------------------
 Write-Host "Auf welche Festplatte soll es gesichert werden?"
 Get-Volume | Select-Object DriveLetter | Out-Host
 Write-Host "Nenne den Buchstaben:"
@@ -202,15 +217,18 @@ $askedVolume = Read-Host
 $destinationPath = $askedVolume + ":\"
 Write-Host "Destination is: $destinationPath"
 
+# Zieluser festlegen ------------------------------------------------------------
 Write-Host "Welcher User bekommt die Daten?"
 $destinationPath = $askedVolume + ":\Users\"
 Get-ChildItem -Path $destinationPath | Out-Host
 $destinationUser = Read-Host
 $destinationPath = $askedVolume + ":\Users\" + $destinationUser
 
+# Bestaetigung ------------------------------------------------------------
 Write-Host "Soll von" $sourcePath "auf" $destinationPath "Uebertragen werden? (J/N)"
 $answer = Read-Host
 
+# Datenuebertragung ------------------------------------------------------------
 if ($answer -eq "J" -or $answer -eq "j") {
     foreach ($sourceFolder in $sourceFolders) {
         try {
@@ -229,15 +247,15 @@ else {
 
 Write-Host "Vorgang Abgeschlossen!"
 playSound
-Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+Read-Host "Druecke Enter..."
 }
 
 
-function ClearScreen {
+function ClearScreen { # Funktion zum Loeschen des Bildschirms
     Clear-Host
 }
 
-function playSound {
+function playSound {    # Funktion zum Abspielen eines Sounds
     [Console]::Beep(293, 125) # D4
     [Console]::Beep(293, 125) # D4
     [Console]::Beep(587, 300) # D5
@@ -249,23 +267,25 @@ function playSound {
     [Console]::Beep(349, 150) # F4
     [Console]::Beep(392, 200) # G4
 }
-function systemIntegrity {
+function systemIntegrity { # Funktion zur Ueberpruefung der Systemintegritaet
     ClearScreen
     Write-Host "Integritaet der Systemdateien wird ueberprueft..."
     sfc /scannow
-    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+    playSound
+    Read-Host "Druecke Enter..."
 }
 
 
-function DISMCheck {
+function DISMCheck {    
     ClearScreen
-    # ?berpr?fen Sie die Gesundheit des Systemabbilds
+    # ueberpruefen des Systemabbilds
     $checkHealthResult = & DISM /Online /Cleanup-Image /CheckHealth
     DISM /Online /Cleanup-Image /ScanHealth
-    # Wenn der CheckHealth-Befehl eine Besch?digung gefunden hat, f?hren Sie den RestoreHealth-Befehl aus
+    # Wenn der CheckHealth-Befehl eine Beschaedigung gefunden hat, fuehrt es den RestoreHealth-Befehl aus
     if ($checkHealthResult -like '*Der Komponentenspeicher ist reparierbar*') {
         & DISM /Online /Cleanup-Image /RestoreHealth
     }
+    playSound
     Read-Host "Druecke Enter..."
 }
 
@@ -432,6 +452,7 @@ function Information {
 }
 
 
+# Hauptmenue ------------------------------------------------------------
 do {
     ClearScreen
     Write-Host "
@@ -461,7 +482,7 @@ ____|_       ___|   |___.'
     Write-Host "Q. Beenden"
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
 
-
+# Menueauswahl ------------------------------------------------------------
     switch ($userInput) {
         '1' {
             SystemInfo
