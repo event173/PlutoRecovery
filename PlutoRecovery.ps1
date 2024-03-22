@@ -34,11 +34,11 @@ function TemporaryFiles {
             }
         }
 
-        Write-Host "Temporaere Dateien erfolgreich geloescht."
+        Write-Host "Temporaere Dateien erfolgreich geloescht." -ForegroundColor Green
     } else {
         Write-Host "Loeschen der temporaeren Dateien abgebrochen."
     }
-    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+    Read-Host "Druecke Enter..."
 }
 
 
@@ -56,7 +56,7 @@ try {
 } catch {
     Write-Error "Fehler beim Erstellen des Wiederherstellungspunktes: $_"
 }
-Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+Read-Host "Druecke Enter..."
 }
 
 function DiskHealth{
@@ -78,7 +78,7 @@ foreach ($disk in $physicalDisks) {
     }
 
 }
-Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+Read-Host "Druecke Enter..."
 }
 
 
@@ -124,7 +124,7 @@ function SystemInfo {
         Write-Host "Kapazitaet: $capacityGB GB, Geschwindigkeit: $($_.Speed) MHz, Hersteller: $($_.Manufacturer), Seriennummer: $($_.SerialNumber)"
     }
     playSound
-    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+    Read-Host "Druecke Enter..."
 }
 
 function DataTransfer {
@@ -238,28 +238,16 @@ function ClearScreen {
 }
 
 function playSound {
-    [Console]::Beep(658, 125)
-    [Console]::Beep(1320, 500)
-    [Console]::Beep(990, 250)
-    [Console]::Beep(1056, 250)
-    [Console]::Beep(1188, 250)
-    [Console]::Beep(1320, 125)
-    [Console]::Beep(1188, 125)
-    [Console]::Beep(1056, 250)
-    [Console]::Beep(990, 250)
-    [Console]::Beep(880, 500)
-    [Console]::Beep(880, 250)
-    [Console]::Beep(1056, 250)
-    [Console]::Beep(1320, 500)
-    [Console]::Beep(1188, 250)
-    [Console]::Beep(1056, 250)
-    [Console]::Beep(990, 750)
-    [Console]::Beep(1056, 250)
-    [Console]::Beep(1188, 500)
-    [Console]::Beep(1320, 500)
-    [Console]::Beep(1056, 500)
-    [Console]::Beep(880, 500)
-    [Console]::Beep(880, 500)
+    [Console]::Beep(293, 125) # D4
+    [Console]::Beep(293, 125) # D4
+    [Console]::Beep(587, 300) # D5
+    [Console]::Beep(440, 400) # A4
+    [Console]::Beep(415, 250) # G#4
+    [Console]::Beep(392, 250) # G4
+    [Console]::Beep(349, 250) # F4
+    [Console]::Beep(293, 150) # D4
+    [Console]::Beep(349, 150) # F4
+    [Console]::Beep(392, 200) # G4
 }
 function systemIntegrity {
     ClearScreen
@@ -278,7 +266,7 @@ function DISMCheck {
     if ($checkHealthResult -like '*Der Komponentenspeicher ist reparierbar*') {
         & DISM /Online /Cleanup-Image /RestoreHealth
     }
-    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+    Read-Host "Druecke Enter..."
 }
 
 
@@ -289,7 +277,7 @@ function RAMTest {
 function RAMResult {
     ClearScreen
     Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-MemoryDiagnostics-Results'} | Select-Object -Property LevelDisplayName, Id, TimeCreated, Message, TaskDisplayName  | Format-List
-    Read-Host "Druecken Sie eine beliebige Taste, um den Vorgang abzuschliessen."
+    Read-Host "Druecke Enter..."
 }
 
 function Zusammenfassung {
@@ -448,18 +436,13 @@ do {
     ClearScreen
     Write-Host "
     
-    &&&                
-&    &&&               
-&&&&&&&&               
- &&&&&&&&              
-      &&&&&            
-        &&&&&                   PlutoRecovery
-          &&&&&                 Made by Nick
-            &&&&&      
-              &&&&&&&& 
-               &&&&&&&&
-               &&&    &
-                &&&    
+    |\_/|                  
+    | @ @   Woof! 
+    |   <>              _       PlutoRecovery
+    |  _/\------____ ((| |))    Made by Nick
+    |               `--' |   
+____|_       ___|   |___.' 
+/_/_____/____/_______|
     " -ForegroundColor Yellow
     Write-Host "`nMenu:" -ForegroundColor Blue
     Write-Host "1. Systeminformationen anzeigen"
