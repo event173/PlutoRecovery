@@ -489,10 +489,10 @@ ____|_       ___|   |___.'
             TemporaryFiles
         }
         '4' {
-            DiskHealth
+            Wiederherstellungspunkt
         }
         '5' {
-            Wiederherstellungspunkt
+            DiskHealth
         }
         '6' {
             SystemIntegrity
