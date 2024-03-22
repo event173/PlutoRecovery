@@ -401,7 +401,7 @@ function Win11info {
     Write-Host "`nUm PlutoRecovery zum Upgraden auf Windows 11 zu verwenden, lege`ndas Programm auf einen USB-Stick in das Rootverzeichnis."
     Write-Host "`nNun lege einen Ordner namens 'Windows11' auf den USB-Stick an."
     Write-Host "`nLade die aktuelle Windows-ISO unter https://www.microsoft.com/de-de/software-download/windows11 herunter."
-    Write-Host "`nÖffne die ISO und kopiere alle Dateien in den Ordner 'Windows11' auf dem USB-Stick."
+    Write-Host "`nOeffne die ISO und kopiere alle Dateien in den Ordner 'Windows11' auf dem USB-Stick."
     Write-Host "`nNun kannst du den USB-Stick in den PC stecken und das Programm als Administrator starten."
     Write-Host "Das Upgrade funktioniert nun ueber den Menuepunkt 'U'"
     Write-Host "`nHinweis:" -ForegroundColor Yellow
@@ -410,22 +410,12 @@ function Win11info {
     Write-Host "`nEs wird empfohlen, vor dem Upgrade ein Backup zu erstellen."
     Read-Host "`nDruecke Enter..."
 }
-function tempinfo {
-    ClearScreen
-    Write-Host "Nicht alle Temporaeren Dateien konnten geloescht werden" -ForegroundColor Yellow
-    Write-Host "`n Das ist Normal, keine Sorge."
-    Write-Host "Grund dafuer ist, dass einige Dateien von Programmen verwendet werden und nicht geloescht werden koennen."
-    Write-Host "PlutoRecovery bemueht sich, so viele Dateien wie moeglich zu loeschen, in dem es Programme beendet, die diese Dateien verwenden."
-    Write-Host "Es gibt aber auch Dateien, die von Windows verwendet werden und nicht geloescht werden koennen."
-    Read-Host "`nDruecke Enter..."
-}
 function Information {
     do{
         ClearScreen
         Write-Host "Wie kann ich dir helfen?" -ForegroundColor Yellow
         Write-Host "`n1. Wie kann ich mein System auf Win 11 Upgraden?"
-        Write-Host "2. Es konnten nicht alle Temporaeren Dateien geloescht werden"
-        Write-Host "Q. Zum Hauptbildschirm zurueckkehren"
+        Write-Host "`nQ. Zum Hauptbildschirm zurueckkehren"
         $userInput = Read-Host "`nBitte waehle eine Option"
     
 
@@ -479,7 +469,6 @@ ____|_       ___|   |___.'
 
     Write-Host "`ni. Information" -ForegroundColor Yellow
 
-    Write-Host "`nC. Terminal leeren" -ForegroundColor Yellow
     Write-Host "`nQ. Beenden" -ForegroundColor Red
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
 
