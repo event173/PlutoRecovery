@@ -1,48 +1,40 @@
 
-#Script itself
+# -------------- Beginn Temporaere Dateien ------------------------------------------------------------
 function TemporaryFiles {
-    ClearScreen
-    $confirmation = Read-Host "Moechten Sie wirklich alle temporaeren Dateien loeschen? (J) (N)"
-    if ($confirmation -eq 'J' -or $confirmation -eq 'j') {
-        Write-Host "Temporaere Dateien werden gereinigt..."
-
-        # Anwenudngen, die beendet werden sollen
-        $tasksToTerminate = @("msedgewebview2", "Creative Cloud", "msedge", "CoreSync", "OfficeClickToRun", "steam", "steamwebhelper", "steamservice", "Discord", "Spotify")
-
-        # Beenden der Anwendungen
-        foreach ($task in $tasksToTerminate) {
-            try {
-                $terminateTask = Get-Process -Name $task -ErrorAction SilentlyContinue
-                if ($terminateTask) {
-                    $terminateTask | Stop-Process -Force
-                    Write-Host "Task $task has been terminated successfully."
-                }
-            } catch {
-                Write-Host "Failed to terminate task $task."
-            }
-        }
-        # Pfade zu den temporaeren Dateien
-        $tempDirectories = @("C:\Windows\Temp", "C:\Users\*\AppData\Local\Temp")
-        # Loeschen der temporaeren Dateien
-        foreach ($dir in $tempDirectories) {
-            Get-ChildItem $dir -Recurse | ForEach-Object {
-                $currentItem = $_
-                try {
-                    Remove-Item $currentItem.FullName -Force -Recurse -ErrorAction Stop
-                } catch {
-                    Write-Host "Failed to delete file $($currentItem.FullName)."
-                }
-            }
-        }
-
-        Write-Host "Temporaere Dateien erfolgreich geloescht." -ForegroundColor Green
-    } else {
-        Write-Host "Loeschen der temporaeren Dateien abgebrochen."
+    do{
+        ClearScreen
+        Write-Host "Temporaere Dateien entfernen" -ForegroundColor Yellow
+        Write-Host "`n1. Reinigungsprofil anlegen"
+        Write-Host "2. Reinigungsprofil ausfuehren"
+        Write-Host "Q. Zum Hauptbildschirm zurueckkehren"
+        $userInput = Read-Host "`nBitte waehle eine Option"
+    
+    switch($userInput) {
+        '1' {
+            CreateCleaningProfile
+        } 
+        '2' {
+            RunCleaningProfile
+        }	
+    
     }
-    Read-Host "Druecke Enter..."
+
+} while ($userInput -ne 'Q')
 }
 
+function CreateCleaningProfile {
+    cleanmgr /sageset:1
+}
+function RunCleaningProfile {
+    cleanmgr /sagerun:1
+}
 
+#---------------- Ende temporaere Dateien ------------------------------------------------------------
+
+
+
+
+# Funktionen ------------------------------------------------------------
 function Wiederherstellungspunkt {
     ClearScreen
     Write-Host "Wiederherstellungspunkt wird erstellt..."
@@ -76,8 +68,8 @@ function DiskHealth{
     chkdsk /f /r
 
     # Informationen zu den einzelnen Festplatten und Partitionen ausgeben
-foreach ($disk in $physicalDisks) {
-    Write-Host "Laufwerk: $($disk.FriendlyName), Size: $($disk.Size), Medientyp: $($disk.MediaType), Betriebsstatus: $($disk.OperationalStatus), Gesundheitsstatus: $($disk.HealthStatus)"
+    foreach ($disk in $physicalDisks) {
+        Write-Host "Laufwerk: $($disk.FriendlyName), Size: $($disk.Size), Medientyp: $($disk.MediaType), Betriebsstatus: $($disk.OperationalStatus), Gesundheitsstatus: $($disk.HealthStatus)"
     
     # Abrufen der Partitionen fuer das aktuelle Laufwerk
     $partitions = Get-Partition | Where-Object { $_.DiskNumber -eq $disk.DeviceID }
@@ -87,7 +79,7 @@ foreach ($disk in $physicalDisks) {
     }
 
 }
-Read-Host "Druecke Enter..."
+        Read-Host "Druecke Enter..."
 }
 
 
@@ -141,113 +133,113 @@ function SystemInfo {
 
 function DataTransfer {
     ClearScreen
-Write-Host "Datenuebertragungsskript wird gestartet..."
-Write-Host "Dieses Skript sichert die wichtigsten Daten eines Users"
+    Write-Host "Datenuebertragungsskript wird gestartet..."
+    Write-Host "Dieses Skript sichert die wichtigsten Daten eines Users"
 
 
-Write-Host "Von welcher Festplatte soll uebertragen werden?"
-# Alle Laufwerke auflisten ------------------------------------------------------------
-Get-Volume | Select-Object DriveLetter | Out-Host
-Write-Host "Nenne den Buchstaben:"
-$askedVolume = Read-Host
-$sourcePath = $askedVolume + ":\Users\" # Pfad zu den Usern auf der Festplatte hinzufuegen
+    Write-Host "Von welcher Festplatte soll uebertragen werden?"
+    # Alle Laufwerke auflisten ------------------------------------------------------------
+    Get-Volume | Select-Object DriveLetter | Out-Host
+    Write-Host "Nenne den Buchstaben:"
+    $askedVolume = Read-Host
+    $sourcePath = $askedVolume + ":\Users\" # Pfad zu den Usern auf der Festplatte hinzufuegen
 
-# Alle User auflisten ------------------------------------------------------------
-Get-ChildItem -Path $sourcePath | Out-Host
-Write-Host "Welcher User soll gesichert werden?"
-$askedUser = Read-Host
-$sourcePath = $sourcePath + $askedUser
+    # Alle User auflisten ------------------------------------------------------------
+    Get-ChildItem -Path $sourcePath | Out-Host
+    Write-Host "Welcher User soll gesichert werden?"
+    $askedUser = Read-Host
+    $sourcePath = $sourcePath + $askedUser
 
-# Pruefen, ob der User OneDrive hat ------------------------------------------------------------
-Write-Host "Hat der User OneDrive? (J/N)"
-$hasOneDrive = Read-Host
+    # Pruefen, ob der User OneDrive hat ------------------------------------------------------------
+    Write-Host "Hat der User OneDrive? (J/N)"
+    $hasOneDrive = Read-Host
 
 
 
-Write-Host "You chose $sourcePath"  # bsp.: C:\Users\User
+    Write-Host "You chose $sourcePath"  # bsp.: C:\Users\User
 
-# Pfade zu den zu sichernden Ordnern ------------------------------------------------------------
-if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
-    $sourceFolders = @(
-        $sourcePath +"\Onedrive\Desktop";
-        $sourcePath +"\Onedrive\Dokumente";
-        $sourcePath +"\Onedrive\Bilder";
-        $sourcePath +"\Downloads";
-        $sourcePath +"\Contacts";
-        $sourcePath +"\Favorites";
-        $sourcePath +"\Links";
-        $sourcePath +"\Saved Games";
-        $sourcePath +"\Searches";
-        $sourcePath +"\Music";
-        $sourcePath +"\Videos"
+    # Pfade zu den zu sichernden Ordnern ------------------------------------------------------------
+    if ($hasOneDrive -eq 'J' -or $hasOneDrive -eq 'j') {
+        $sourceFolders = @(
+            $sourcePath +"\Onedrive\Desktop";
+            $sourcePath +"\Onedrive\Dokumente";
+            $sourcePath +"\Onedrive\Bilder";
+            $sourcePath +"\Downloads";
+            $sourcePath +"\Contacts";
+            $sourcePath +"\Favorites";
+            $sourcePath +"\Links";
+            $sourcePath +"\Saved Games";
+            $sourcePath +"\Searches";
+            $sourcePath +"\Music";
+            $sourcePath +"\Videos"
 
-    )
-    Write-Host "Es wurde OneDrive ausgewaehlt" -ForegroundColor Yellow
-    Write-Host "Folgende Ordner werden gesichert:"
-    foreach ($folder in $sourceFolders) {
-        Write-Host $folder
-    }
-}
-else {
-    $sourceFolders = @(
-        $sourcePath +"\Desktop";
-        $sourcePath +"\Documents";
-        $sourcePath +"\Pictures";
-        $sourcePath +"\Downloads";
-        $sourcePath +"\Contacts";
-        $sourcePath +"\Favorites";
-        $sourcePath +"\Links";
-        $sourcePath +"\Saved Games";
-        $sourcePath +"\Searches";
-        $sourcePath +"\Music";
-        $sourcePath +"\Videos"
-    )
-    Write-Host "Es wurde kein OneDrive ausgewaehlt" -ForegroundColor Yellow
-    Write-Host "Folgende Ordner werden gesichert:"
-    foreach ($folder in $sourceFolders) {
-        Write-Host $folder
-    }
-}
-
-# Zielordner festlegen ------------------------------------------------------------
-Write-Host "Auf welche Festplatte soll es gesichert werden?"
-Get-Volume | Select-Object DriveLetter | Out-Host
-Write-Host "Nenne den Buchstaben:"
-$askedVolume = Read-Host
-$destinationPath = $askedVolume + ":\"
-Write-Host "Destination is: $destinationPath"
-
-# Zieluser festlegen ------------------------------------------------------------
-Write-Host "Welcher User bekommt die Daten?"
-$destinationPath = $askedVolume + ":\Users\"
-Get-ChildItem -Path $destinationPath | Out-Host
-$destinationUser = Read-Host
-$destinationPath = $askedVolume + ":\Users\" + $destinationUser
-
-# Bestaetigung ------------------------------------------------------------
-Write-Host "Soll von" $sourcePath "auf" $destinationPath "Uebertragen werden? (J/N)"
-$answer = Read-Host
-
-# Datenuebertragung ------------------------------------------------------------
-if ($answer -eq "J" -or $answer -eq "j") {
-    foreach ($sourceFolder in $sourceFolders) {
-        try {
-            Write-Host "Kopiere $sourceFolder nach $destinationPath"
-            Copy-Item -Path $sourceFolder -Destination $destinationPath -Recurse -Force -ErrorAction Stop
-        }
-        catch {
-            Write-Output "Fehler beim Kopieren des Ordners '$sourceFolder': $($_.Exception.Message)"
+        )
+        Write-Host "Es wurde OneDrive ausgewaehlt" -ForegroundColor Yellow
+        Write-Host "Folgende Ordner werden gesichert:"
+        foreach ($folder in $sourceFolders) {
+            Write-Host $folder
         }
     }
-}
-else {
-    break
-}
+    else {
+        $sourceFolders = @(
+            $sourcePath +"\Desktop";
+            $sourcePath +"\Documents";
+            $sourcePath +"\Pictures";
+            $sourcePath +"\Downloads";
+            $sourcePath +"\Contacts";
+            $sourcePath +"\Favorites";
+            $sourcePath +"\Links";
+            $sourcePath +"\Saved Games";
+            $sourcePath +"\Searches";
+            $sourcePath +"\Music";
+            $sourcePath +"\Videos"
+        )
+        Write-Host "Es wurde kein OneDrive ausgewaehlt" -ForegroundColor Yellow
+        Write-Host "Folgende Ordner werden gesichert:"
+        foreach ($folder in $sourceFolders) {
+            Write-Host $folder
+        }
+    }
+
+    # Zielordner festlegen ------------------------------------------------------------
+    Write-Host "Auf welche Festplatte soll es gesichert werden?"
+    Get-Volume | Select-Object DriveLetter | Out-Host
+    Write-Host "Nenne den Buchstaben:"
+    $askedVolume = Read-Host
+    $destinationPath = $askedVolume + ":\"
+    Write-Host "Destination is: $destinationPath"
+
+    # Zieluser festlegen ------------------------------------------------------------
+    Write-Host "Welcher User bekommt die Daten?"
+    $destinationPath = $askedVolume + ":\Users\"
+    Get-ChildItem -Path $destinationPath | Out-Host
+    $destinationUser = Read-Host
+    $destinationPath = $askedVolume + ":\Users\" + $destinationUser
+
+    # Bestaetigung ------------------------------------------------------------
+    Write-Host "Soll von" $sourcePath "auf" $destinationPath "Uebertragen werden? (J/N)"
+    $answer = Read-Host
+
+    # Datenuebertragung ------------------------------------------------------------
+    if ($answer -eq "J" -or $answer -eq "j") {
+        foreach ($sourceFolder in $sourceFolders) {
+            try {
+                Write-Host "Kopiere $sourceFolder nach $destinationPath"
+                Copy-Item -Path $sourceFolder -Destination $destinationPath -Recurse -Force -ErrorAction Stop
+            }
+            catch {
+                Write-Output "Fehler beim Kopieren des Ordners '$sourceFolder': $($_.Exception.Message)"
+            }
+        }
+    }
+    else {
+        break
+    }
 
 
-Write-Host "Vorgang Abgeschlossen!"
-playSound
-Read-Host "Druecke Enter..."
+    Write-Host "Vorgang Abgeschlossen!"
+    playSound
+    Read-Host "Druecke Enter..."
 }
 
 
@@ -464,21 +456,31 @@ do {
 ____|_       ___|   |___.' 
 /_/_____/____/_______|
     " -ForegroundColor Yellow
-    Write-Host "`nMenu:" -ForegroundColor Blue
+    Write-Host "`nMenu:" -BackgroundColor black -ForegroundColor Yellow
     Write-Host "1. Systeminformationen anzeigen"
+
+    Write-Host "`nSystemwartung" -BackgroundColor black -ForegroundColor Yellow
     Write-Host "2. Datenuebertragung starten"
-    Write-Host "3. Festplattengesundheit ueberpruefen"
-    Write-Host "4. Temporaere Dateien reinigen"
-    Write-Host "5. Wiederherstellungspunkt erstellen"
+    Write-Host "3. Temporaere Dateien reinigen"
+    Write-Host "4. Wiederherstellungspunkt erstellen"
+
+    Write-Host "`nSystemchecks" -BackgroundColor black -ForegroundColor Yellow
+    Write-Host "`5. Festplattengesundheit ueberpruefen"
     Write-Host "6. Integritaet der Systemdateien ueberpruefen"
     Write-Host "7. Systemabbild ueberpruefen und reparieren"
+
+    Write-Host "`nArbeitsspeicher" -BackgroundColor black -ForegroundColor Yellow
     Write-Host "8. RAM Testen"
-    Write-Host "9. RAM Testergebnisse anzeigen"#
-    Write-Host "0. Systemzusammenfassung erstellen"
-    Write-Host "`nU. Windows 11 Upgrade auf nicht kompatibler Hardware starten"
-    Write-Host "`ni. Information"
-    Write-Host "`nC. Terminal leeren"
-    Write-Host "Q. Beenden"
+    Write-Host "9. RAM Testergebnisse anzeigen"
+    Write-Host "`n-------------------"
+    Write-Host "`n0. Systemzusammenfassung erstellen" -ForegroundColor Green
+
+    Write-Host "`nU. Windows 11 Upgrade auf nicht kompatibler Hardware starten" -ForegroundColor Cyan
+
+    Write-Host "`ni. Information" -ForegroundColor Yellow
+
+    Write-Host "`nC. Terminal leeren" -ForegroundColor Yellow
+    Write-Host "`nQ. Beenden" -ForegroundColor Red
     $userInput = Read-Host "`nBitte waehlen Sie eine Option"
 
 # Menueauswahl ------------------------------------------------------------
@@ -490,10 +492,10 @@ ____|_       ___|   |___.'
             DataTransfer
         }
         '3' {
-            DiskHealth
+            TemporaryFiles
         }
         '4' {
-            TemporaryFiles
+            DiskHealth
         }
         '5' {
             Wiederherstellungspunkt
