@@ -271,7 +271,6 @@ function systemIntegrity { # Funktion zur Ueberpruefung der Systemintegritaet
     ClearScreen
     Write-Host "Integritaet der Systemdateien wird ueberprueft..."
     sfc /scannow
-    playSound
     Read-Host "Druecke Enter..."
 }
 
