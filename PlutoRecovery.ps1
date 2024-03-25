@@ -27,6 +27,7 @@ function CreateCleaningProfile {
 }
 function RunCleaningProfile {
     cleanmgr /sagerun:1
+    playSound
 }
 
 #---------------- Ende temporaere Dateien ------------------------------------------------------------
@@ -49,6 +50,7 @@ function Wiederherstellungspunkt {
 try {
     Checkpoint-Computer -Description $restorePointName -RestorePointType "MODIFY_SETTINGS"
     Write-Host "Wiederherstellungspunkt erfolgreich erstellt: $restorePointName"
+    playSound
 } catch {
     Write-Error "Fehler beim Erstellen des Wiederherstellungspunktes: $_"   # $_ ist die Fehlermeldung
 }
@@ -127,7 +129,6 @@ function SystemInfo {
         $capacityGB = [math]::round($_.Capacity / 1GB, 2)
         Write-Host "Kapazitaet: $capacityGB GB, Geschwindigkeit: $($_.Speed) MHz, Hersteller: $($_.Manufacturer), Seriennummer: $($_.SerialNumber)"
     }
-    playSound
     Read-Host "Druecke Enter..."
 }
 
@@ -248,21 +249,23 @@ function ClearScreen { # Funktion zum Loeschen des Bildschirms
 }
 
 function playSound {    # Funktion zum Abspielen eines Sounds
-    [Console]::Beep(293, 125) # D4
-    [Console]::Beep(293, 125) # D4
-    [Console]::Beep(587, 300) # D5
-    [Console]::Beep(440, 400) # A4
-    [Console]::Beep(415, 250) # G#4
-    [Console]::Beep(392, 250) # G4
-    [Console]::Beep(349, 250) # F4
-    [Console]::Beep(293, 150) # D4
-    [Console]::Beep(349, 150) # F4
-    [Console]::Beep(392, 200) # G4
+	[System.Console]::Beep(659, 125);
+	[System.Console]::Beep(659, 125);
+	[System.Threading.Thread]::Sleep(125);
+	[System.Console]::Beep(659, 125);
+	[System.Threading.Thread]::Sleep(167);
+	[System.Console]::Beep(523, 125);
+	[System.Console]::Beep(659, 125);
+	[System.Threading.Thread]::Sleep(125);
+	[System.Console]::Beep(784, 125);
+	[System.Threading.Thread]::Sleep(375);
+	[System.Console]::Beep(392, 125);
 }
 function systemIntegrity { # Funktion zur Ueberpruefung der Systemintegritaet
     ClearScreen
     Write-Host "Integritaet der Systemdateien wird ueberprueft..."
     sfc /scannow
+    playSound
     Read-Host "Druecke Enter..."
 }
 
@@ -396,8 +399,8 @@ function Win11 {
     $usbPfad = $usbBuchstabe + ":\Windows11"
     Write-Host "Lade Daten..."
     Copy-Item -Path $usbPfad -Destination "C:\" -Recurse -Force -ErrorAction Stop
-
     Start-Process -FilePath "C:\Windows11\setup.exe" -ArgumentList "/product server"
+    playSound
 }
 
 function Win11info {
