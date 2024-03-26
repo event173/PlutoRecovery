@@ -400,7 +400,6 @@ function Win11 {
     Write-Host "Lade Daten..."
     Copy-Item -Path $usbPfad -Destination "C:\" -Recurse -Force -ErrorAction Stop
     Start-Process -FilePath "C:\Windows11\setup.exe" -ArgumentList "/product server"
-    playSound
 }
 
 function Win11info {
