@@ -278,6 +278,7 @@ function DISMCheck {
     # Frage, ob das Systemabbild repariert werden soll
     Write-Host "Es wird versucht, das Systemabbild zu reparieren..."
     DISM /Online /Cleanup-Image /RestoreHealth
+    Write-Host "Systemabbildreparatur abgeschlossen."
     Read-Host "Druecke Enter..."
 }
 
