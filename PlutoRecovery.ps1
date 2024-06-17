@@ -276,15 +276,9 @@ function DISMCheck {
     DISM /Online /Cleanup-Image /CheckHealth
     DISM /Online /Cleanup-Image /ScanHealth
     # Frage, ob das Systemabbild repariert werden soll
-    Write-Host "Soll das Systemabbild repariert werden? (J/N)"
-    $answer = Read-Host
-    if ($answer -eq "J" -or $answer -eq "j") {
-        DISM /Online /Cleanup-Image /RestoreHealth
-    }
-    else {
-        break
-    }
-    playSound
+    Write-Host "Es wird versucht, das Systemabbild zu reparieren..."
+    DISM /Online /Cleanup-Image /RestoreHealth
+    Write-Host "Systemabbildreparatur abgeschlossen."
     Read-Host "Druecke Enter..."
 }
 
