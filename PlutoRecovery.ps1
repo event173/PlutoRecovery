@@ -420,7 +420,10 @@ function Win11info {
 function Information {
     do{
         ClearScreen
-        Write-Host "Wie kann ich dir helfen?" -ForegroundColor Yellow
+
+        Write-Host "`nUpdates findest du hier: https://github.com/event173/PlutoRecovery"
+
+        Write-Host "`nWie kann ich dir helfen?" -ForegroundColor Yellow
         Write-Host "`n1. Wie kann ich mein System auf Win 11 Upgraden?"
         Write-Host "`nQ. Zum Hauptbildschirm zurueckkehren"
         $userInput = Read-Host "`nBitte waehle eine Option"
