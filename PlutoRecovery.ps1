@@ -143,7 +143,7 @@ function DataTransfer {
     Get-Volume | Select-Object DriveLetter | Out-Host
     Write-Host "Nenne den Buchstaben:"
     $askedVolume = Read-Host
-    $sourcePath = $askedVolume + ":\Users\" # Pfad zu den Usern auf der Festplatte hinzufuegen
+    $sourcePath = $askedVolume + ":\Users\" # Pfad zu den Usern auf der Festplatte hinzufügen
 
     # Alle User auflisten ------------------------------------------------------------
     Get-ChildItem -Path $sourcePath | Out-Host
@@ -301,12 +301,6 @@ $outputPath = "C:\SystemZusammenfassung.txt"
 
 # Systeminformationen sammeln
 $systemInfo = Get-ComputerInfo | Select-Object CsManufacturer, CsModel, WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer
-
-# Installierte Software auflisten
-$installedSoftware = Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher | Where-Object {$_.DisplayName -ne $null}
-
-# Netzwerkinformationen sammeln
-$networkInfo = Get-NetIPConfiguration | Select-Object InterfaceAlias, InterfaceDescription, IPv4Address
 
 # Sicherheitseinstellungen prüfen
 # Beispiel: Windows Defender Status
