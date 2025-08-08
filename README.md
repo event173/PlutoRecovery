@@ -9,3 +9,6 @@ Nichtsdestotrotz hatte ich sehr viel spaß beim erstellen dieses Skriptes :)
 
 Da das Skript nicht signiert ist, wird es als Virus "erkannt". Ihr könnt natürlich auch die .ps1 direkt von der Powershell aus starten. Einfacher und schneller ist die .exe.
 Falls ihr euch nicht sicher seid, könnt ihr euch den Quellcode des Skripts genauer anschauen.
+
+
+# Dieses Skript war sehr auf die Abläufe der Werkstatt abgestimmt. Eine Version 2, die umfangreicher und nützlicher für alle sein soll, ist geplant, aber noch nicht in Aussicht
