@@ -12,3 +12,8 @@ Falls ihr euch nicht sicher seid, könnt ihr euch den Quellcode des Skripts gena
 
 
 # Dieses Skript war sehr auf die Abläufe der Werkstatt abgestimmt. Eine Version 2, die umfangreicher und nützlicher für alle sein soll, ist geplant, aber noch nicht in Aussicht
+
+
+
+
+<img width="940" height="647" alt="plutorecovery ui" src="https://github.com/user-attachments/assets/ff9a22dd-0a12-4745-acdd-0a5fa8951edd" />
